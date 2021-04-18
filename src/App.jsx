@@ -7,12 +7,18 @@ import Result from './components/Result'
 
 function App() {
   const [num, setNum] = useState("0")
-  const [value, setValue] = useState("0")
+  const [value, setValue] = useState(0)
   const [oper, setOper] = useState("")
+  const [sw12, setSw12] = useState(true)
 
   const handleOnClickNumber = (text) => {
-    if (num==="0" || num==="+" || num==="-" || num==="*" || num==="/" || oper !== "") {
+    if (text==="+/-") {
+      setNum(num*(-1))
+      return
+    }
+    if (sw12) {
       setNum(text)
+      setSw12(false)
     }
     else {
       setNum(num.concat(text))
@@ -20,48 +26,52 @@ function App() {
   }
 
   const handleOnClickOperation = (text) => {
-    setValue(num)
-    // setNum(text)
-    evalOperation()
+    if (value===0) {
+      setValue(num)
+    } else {
+      evalOperation(oper)
+    }
     setOper(text)
+    setSw12(true)
   }
 
   const handleOnClickEqual = () => {
-    evalOperation()
-    setOper("")
+    evalOperation(oper)
+    setValue(0)
+    setSw12(true)
   }
 
-  const evalOperation = () => {
-    if((value === "0"  && num === "0") || oper === "") return
+  const evalOperation = (oper) => {
     let res = 0
+    const numT = value
     switch (oper) {
       case "+":
-        res = parseFloat(value) + parseFloat(num)
+        res = parseFloat(numT) + parseFloat(num)
         break
       case "-":
-        res = parseFloat(value) - parseFloat(num)
+        res = parseFloat(numT) - parseFloat(num)
         break
       case "x":  
-        res = parseFloat(value) * parseFloat(num)
+        res = parseFloat(numT) * parseFloat(num)
         break
       case "/":
-        res = parseFloat(value) / parseFloat(num)
+        res = parseFloat(numT) / parseFloat(num)
         break
       case "%":
-        res = parseFloat(value) / 100
+        res = parseFloat(numT) / 100
         break
       default:
         break
     }
-    console.log(res);
     setNum(res.toString())
-    setValue(res.toString())
+    setValue(res)
   }
 
   const handleReset = () => {
     setNum("0")
-    setValue("0")
+    setValue(0)
     setOper("")
+    setSw12(true)
   }
 
   const handleDelOne = () => {
@@ -76,12 +86,12 @@ function App() {
   return (
     <main className='react-calculator'>
       <Result value={num}/>
-      <Numbers 
-        handleOnClickNumber={handleOnClickNumber}
-      />
       <Functions 
         handleReset={handleReset}
         handleDelOne={handleDelOne}
+      />
+      <Numbers 
+        handleOnClickNumber={handleOnClickNumber}
       />
       <MathOperations
         handleOnClickOperation={handleOnClickOperation}

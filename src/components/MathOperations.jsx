@@ -8,7 +8,7 @@ import Button from './button/Button';
 // import BackspaceIcon from '@material-ui/icons/Backspace';
 
 
-const operators = ["/","x","-","+","%"]
+const operators = ["%","/","x","-","+"]
 const MathOperations = ({ handleOnClickOperation, handleOnClickEqual }) => ( 
   <section className = "math-operations">
     {operators.map((num, key) => (
