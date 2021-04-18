@@ -41,7 +41,7 @@ function App() {
       case "-":
         res = parseFloat(value) - parseFloat(num)
         break
-      case "x":
+      case "x":  
         res = parseFloat(value) * parseFloat(num)
         break
       case "/":
